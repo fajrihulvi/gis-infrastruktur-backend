@@ -1,0 +1,216 @@
+/login:
+  post:
+    tags:
+      - Auth
+    description: Login
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: login payload
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: admin@admin.com
+                required: true
+              password:
+                type: string
+                example: admin
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
+
+/user/list:
+  get:
+    tags:
+      - User Management
+    security:
+      - bearerAuth: []
+    description: Get All User
+    parameters:
+      - in: query
+        name: limit
+        required: true
+        type: integer
+        example: 10
+        minimum: 1
+      - in: query
+        name: page
+        required: true
+        type: integer
+        example: 1
+        minimum: 1
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: department_id
+        type: integer
+      - in: query
+        name: role_id
+        type: integer
+      - in: query
+        name: order_by
+        type: integer
+      - in: query
+        name: order_direction
+        type: integer
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/user/create/admin:
+  post:
+    tags:
+      - User Management
+    security:
+      - bearerAuth: []
+    description: Create User Admin
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: admin1@admin.com
+                required: true
+              password:
+                type: string
+                example: admin123
+                required: true
+              created_by:
+                type: integer
+                example: 1
+                required: true
+              updated_by:
+                type: integer
+                example: 1
+                required: true
+              name:
+                type: string
+                example: agung
+                required: true
+              phone:
+                type: string
+                example: '0811111111'
+                required: true
+              department_id:
+                type: integer
+                example: 1
+                required: true
+              nip:
+                type: string
+                example: 80004555123
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
+
+/user/update/admin:
+  put:
+    tags:
+      - User Management
+    security:
+      - bearerAuth: []
+    description: Update User Admin
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 2
+                required: true
+              email:
+                type: string
+                example: admin1@admin.com
+                required: true
+              updated_by:
+                type: integer
+                example: 1
+                required: true
+              name:
+                type: string
+                example: agung
+                required: true
+              phone:
+                type: string
+                example: '0811111111'
+                required: true
+              department_id:
+                type: integer
+                example: 1
+                required: true
+              nip:
+                type: string
+                example: 80004555123
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
+
+/user/delete/admin:
+  delete:
+    tags:
+      - User Management
+    security:
+      - bearerAuth: []
+    description: Delete User Admin
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 2
+                required: true
+              updated_by:
+                type: integer
+                example: 1
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
