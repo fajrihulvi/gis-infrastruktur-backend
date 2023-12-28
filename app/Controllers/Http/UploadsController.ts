@@ -31,18 +31,14 @@ export default class UploadsController {
               let hectare = data.HECTARES
               let x_axis = data.X_CENTR
               let y_axis = data.Y_CENTR
-              let id = data.ID
+              // let id = data.ID
               let code = data.KODE_WIL
               let population = data.Jlh_Pddk
               let wide = data.Luas_Wil
               let feature = JSON.stringify(raw)
 
-              const existing_kec = await Kecamatan.query().where({name: kecamatan}).first()
-              let id_kec = existing_kec != null ? existing_kec.id:null
-              if (existing_kec == null) {
-                let new_kec = await Kecamatan.create({name: kecamatan})
-                id_kec = new_kec.id
-              }
+              const kec = await Kecamatan.firstOrCreate({name: kecamatan}, {name: kecamatan})
+              let id_kec = kec.id
 
               const existing_kel = await Kelurahan.query().where({name: kelurahan, id_kecamatan: id_kec}).first()
               if (!existing_kel) {

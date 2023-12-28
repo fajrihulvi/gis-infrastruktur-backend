@@ -43,6 +43,10 @@ Route.group(() => {
   Route.get('/list', 'DepartmentsController.getList')
 }).middleware('jwt').prefix('master-data/department')
 
+Route.post('shp/upload', 'UploadsController.uploadShp')
+
 Route.group(() => {
-  Route.post('master', 'UploadsController.uploadShp')
+  Route.get('/get-maps', 'MapsController.getMaps')
+  Route.get('/get-list/kecamatan', 'MapsController.getListKecamatan')
+  Route.get('/get-list/kelurahan', 'MapsController.getListKelurahan')
 }).prefix('shp')

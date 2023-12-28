@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Kelurahan from './Kelurahan'
 
 export default class Kecamatan extends BaseModel {
   public static table = 'kecamatans'
@@ -9,6 +10,11 @@ export default class Kecamatan extends BaseModel {
 
   @column()
   public name: string
+
+  @hasMany(() => Kelurahan,{
+    foreignKey: 'id_kecamatan'
+  })
+  public kelurahan: HasMany<typeof Kelurahan>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

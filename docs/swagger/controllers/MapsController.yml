@@ -1,0 +1,59 @@
+/shp/get-maps:
+  get:
+    tags:
+      - Master Data - maps
+    security:
+      - bearerAuth: []
+    description: Get Maps
+    parameters:
+      - in: query
+        name: kecamatan_id
+        type: integer
+        example: 1
+      - in: query
+        name: kelurahan_id
+        type: integer
+        example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/shp/get-list/kecamatan:
+  get:
+    tags:
+      - Master Data - maps
+    security:
+      - bearerAuth: []
+    description: Get List Kecamatan
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/shp/get-list/kelurahan:
+  get:
+    tags:
+      - Master Data - maps
+    security:
+      - bearerAuth: []
+    description: Get List Kelurahan
+    parameters:
+      - in: query
+        name: kecamatan_id
+        required: true
+        type: integer
+        example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
