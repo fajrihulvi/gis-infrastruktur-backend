@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Kecamatan from 'App/Models/Kecamatan';
 import Kelurahan from 'App/Models/Kelurahan';
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class MapsController {
   async getMaps ({request, response}: HttpContextContract) {
@@ -28,7 +28,7 @@ export default class MapsController {
     }
   }
 
-  async getListKecamatan ({request, response}: HttpContextContract) {
+  async getListKecamatan ({response}: HttpContextContract) {
     try {
       // let name = request.qs().name
       let data

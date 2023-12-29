@@ -1,0 +1,14 @@
+/master-data/dinas/list:
+  get:
+    tags:
+      - Master Data - Dinas
+    security:
+      - bearerAuth: []
+    description: Get All Dinas
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request

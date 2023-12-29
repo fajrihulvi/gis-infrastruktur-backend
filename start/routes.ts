@@ -40,10 +40,10 @@ Route.group(() => {
 }).middleware('jwt').prefix('master-data/role')
 
 Route.group(() => {
-  Route.get('/list', 'DepartmentsController.getList')
-}).middleware('jwt').prefix('master-data/department')
+  Route.get('/list', 'DinasController.getList')
+}).middleware('jwt').prefix('master-data/dinas')
 
-Route.post('shp/upload', 'UploadsController.uploadShp')
+Route.post('shp/upload', 'UploadsController.uploadShp').middleware('jwt')
 
 Route.group(() => {
   Route.get('/get-maps', 'MapsController.getMaps')

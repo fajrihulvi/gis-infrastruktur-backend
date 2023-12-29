@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('password').notNullable()
       table.string('email')
       table.string('phone')
-      table.integer('department_id').notNullable()
+      table.integer('dinas_id').notNullable()
       table.integer('role_id').notNullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

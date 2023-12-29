@@ -25,7 +25,7 @@ export default class UsersController {
         .query()
         .where('email', email)
         .preload('role')
-        .preload('department')
+        .preload('dinas')
         .firstOrFail()
 
       if (!user) {
@@ -55,14 +55,14 @@ export default class UsersController {
       const order_by = request.input('order_by') != null ? request.input('order_by'):'id'
       const order_direction = request.input('order_direction') != null ? request.input('order_direction'):'desc'
       const name = request.input('name')
-      const department_id = request.input('department_id')
+      const dinas_id = request.input('dinas_id')
       const role_id = request.input('role_id')
 
       // param initiation (object)
       let param:{[k: string]: any} = {}
 
-      if (department_id) {
-        param.department_id = department_id
+      if (dinas_id) {
+        param.dinas_id = dinas_id
       }
       if (role_id) {
         param.role_id = role_id
@@ -70,9 +70,9 @@ export default class UsersController {
 
       let user
       if (name) {
-        user = await User.query().preload('role').preload('department').where('role_id', '!=', 1).where(param).whereILike('name', '%'+name+'%').orderBy(order_by, order_direction).paginate(page, limit)
+        user = await User.query().preload('role').preload('dinas').where('role_id', '!=', 1).where(param).whereILike('name', '%'+name+'%').orderBy(order_by, order_direction).paginate(page, limit)
       }else{
-        user = await User.query().preload('role').preload('department').where('role_id', '!=', 1).where(param).orderBy(order_by, order_direction).paginate(page, limit)
+        user = await User.query().preload('role').preload('dinas').where('role_id', '!=', 1).where(param).orderBy(order_by, order_direction).paginate(page, limit)
       }
 
       return response.send({code: 200, data: user})
@@ -111,7 +111,7 @@ export default class UsersController {
       const password = request.input('password')
       const email = request.input('email')
       const phone = request.input('phone')
-      const department_id = request.input('department_id')
+      const dinas_id = request.input('dinas_id')
       const nip = request.input('nip')
       const created_by = request.input('created_by')
       const updated_by = request.input('updated_by')
@@ -136,7 +136,7 @@ export default class UsersController {
         user.password = hashed_password
         user.email = email
         user.phone = phone
-        user.department_id = department_id
+        user.dinas_id = dinas_id
         user.role_id = 2
         user.nip = nip
         user.created_by = created_by
@@ -182,7 +182,7 @@ export default class UsersController {
       const name = request.input('name')
       const email = request.input('email')
       const phone = request.input('phone')
-      const department_id = request.input('department_id')
+      const dinas_id = request.input('dinas_id')
       const nip = request.input('nip')
       const updated_by = request.input('updated_by')
 
@@ -203,7 +203,7 @@ export default class UsersController {
       users.name = name
       users.email = email
       users.phone = phone
-      users.department_id = department_id
+      users.dinas_id = dinas_id
       users.nip = nip
       users.updated_by = updated_by
 

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Department from './Department';
+import Dina from './Dina';
 import Role from './Role';
 
 export default class User extends BaseModel {
@@ -23,11 +23,11 @@ export default class User extends BaseModel {
   public nip: string | null
 
   @column()
-  public department_id: number
-  @belongsTo(() => Department,{
-    foreignKey: 'department_id'
+  public dinas_id: number
+  @belongsTo(() => Dina,{
+    foreignKey: 'dinas_id'
   })
-  public department: BelongsTo<typeof Department>
+  public dinas: BelongsTo<typeof Dina>
 
   @column()
   public role_id: number

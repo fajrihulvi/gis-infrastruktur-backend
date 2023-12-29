@@ -2,8 +2,6 @@
   get:
     tags:
       - Master Data - maps
-    security:
-      - bearerAuth: []
     description: Get Maps
     parameters:
       - in: query
@@ -26,8 +24,6 @@
   get:
     tags:
       - Master Data - maps
-    security:
-      - bearerAuth: []
     description: Get List Kecamatan
     responses:
       200:
@@ -41,8 +37,6 @@
   get:
     tags:
       - Master Data - maps
-    security:
-      - bearerAuth: []
     description: Get List Kelurahan
     parameters:
       - in: query
