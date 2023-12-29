@@ -12,7 +12,9 @@ export default class MapsController {
 
       if (kecamatan_id) {
         if (kelurahan_id) {
-          data = await Kelurahan.query().where({id: kelurahan_id}).preload('kecamatan').first()
+          data = await Kecamatan.query().where({id: kecamatan_id}).preload('kelurahan', (postsQuery) => {
+            postsQuery.where({id: kelurahan_id})
+          }).first()
         } else {
           data = await Kecamatan.query().where({id: kecamatan_id}).preload('kelurahan').first()
         }
