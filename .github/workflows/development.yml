@@ -1,4 +1,4 @@
-name: Build Docker Image Development ARU Api
+name: Build Docker Image Development GIS Api
 
 on:
   push:
