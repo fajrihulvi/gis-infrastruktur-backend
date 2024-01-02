@@ -1,7 +1,7 @@
 ARG NODE_IMAGE=node:16.16.0
 
 FROM $NODE_IMAGE AS base
-RUN apk --no-cache add dumb-init
+RUN apt-get install dumb-init --no-cache
 RUN mkdir -p /home/node/app && chown node:node /home/node/app
 WORKDIR /home/node/app
 USER node
