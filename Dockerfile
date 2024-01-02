@@ -1,26 +1,29 @@
-ARG NODE_IMAGE=node:16.16.0
+# Use the latest Node.js image
+FROM node:latest
 
-FROM $NODE_IMAGE AS base
-RUN apt-get install dumb-init --no-cache
-RUN mkdir -p /home/node/app && chown node:node /home/node/app
-WORKDIR /home/node/app
-USER node
-RUN mkdir tmp
+# Set the working directory inside the container
+WORKDIR /app
 
-FROM base AS dependencies
-COPY --chown=node:node ./package*.json ./
-RUN npm ci
-COPY --chown=node:node . .
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
-FROM dependencies AS build
-RUN node ace build --production
+# Install the required dependencies
+RUN npm install
 
-FROM base AS production
-ENV NODE_ENV=production
-ENV PORT=$PORT
-ENV HOST=0.0.0.0
-COPY --chown=node:node ./package*.json ./
-RUN npm ci --production
-COPY --chown=node:node --from=build /home/node/app/build .
-EXPOSE $PORT
-CMD [ "dumb-init", "node", "server.js" ]
+# Copy all source code to the container
+COPY . .
+
+# RUN cp .env.example .env
+
+# Set the necessary environment variables
+COPY .env.example .env
+
+# Generate the application key
+# RUN adonis key:generate
+
+# Run database migrations (optional)
+# RUN node ace migration:run
+
+# Run the Adonis server
+EXPOSE 3000
+CMD ["node ace", "serve", "--watch"]
