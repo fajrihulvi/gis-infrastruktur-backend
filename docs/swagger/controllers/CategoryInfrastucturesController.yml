@@ -1,0 +1,12 @@
+/category/list:
+  get:
+    tags:
+      - Master Data - Category Infrastructure
+    description: Get All Category Infrastructure
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
