@@ -43,6 +43,10 @@ Route.group(() => {
   Route.get('/list', 'DinasController.getList')
 }).middleware('jwt').prefix('master-data/dinas')
 
+Route.group(() => {
+  Route.get('/list', 'CategoryInfrastucturesController.getAllCategory')
+}).prefix('category')
+
 Route.post('shp/upload', 'UploadsController.uploadShp').middleware('jwt')
 
 Route.group(() => {
