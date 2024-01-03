@@ -1,0 +1,28 @@
+# Set the base image to node:14-alpine
+FROM node:18.19.0-alpine as base
+RUN apk --no-cache add dumb-init
+RUN mkdir -p /home/node/app && chown node:node /home/node/app
+WORKDIR /home/node/app
+USER node
+
+FROM base as deps
+COPY --chown=node:node ./package*.json ./
+RUN npm install
+COPY --chown=node:node . .
+
+FROM deps as builder
+RUN node ace build --production
+
+FROM base as production
+RUN mkdir -p "storage/templates"
+COPY --chown=node:node --from=deps ["/home/node/app/.env", "/home/node/app/package.json", "/home/node/app/package-lock.json", "./"]
+COPY --chown=node:node --from=builder ["/home/node/app/build", "/home/node/app/docker", "./"]
+RUN npm ci --production
+
+ENV ENV_PATH=/home/node/app/.env
+ENV NODE_ENV="production"
+ENV HOST=0.0.0.0
+EXPOSE $PORT
+
+RUN chmod +x /home/node/app/docker/prod/entrypoint.sh
+ENTRYPOINT ["/home/node/app/docker/prod/entrypoint.sh"]

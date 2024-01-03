@@ -1,29 +1,19 @@
-# Use the latest Node.js image
-FROM node:latest
+# Set the base image to node:14-alpine
+FROM node:18.19.0-alpine as base
+RUN apk --no-cache add dumb-init
+RUN mkdir -p /home/node/app && chown node:node /home/node/app
+WORKDIR /home/node/app
+USER node
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json to the container
-COPY package*.json ./
-
-# Install the required dependencies
+FROM base as deps
+COPY --chown=node:node ./package*.json ./
 RUN npm install
+COPY --chown=node:node . .
 
-# Copy all source code to the container
-COPY . .
+# ENV ENV_PATH=/home/node/app/.env
+ENV NODE_ENV="development"
+ENV HOST=0.0.0.0
+EXPOSE $PORT
 
-# RUN cp .env.example .env
-
-# Set the necessary environment variables
-COPY .env.example .env
-
-# Generate the application key
-# RUN adonis key:generate
-
-# Run database migrations (optional)
-# RUN node ace migration:run
-
-# Run the Adonis server
-EXPOSE 3000
-CMD ["node ace", "serve", "--watch"]
+RUN chmod +x /home/node/app/docker/dev/entrypoint.sh
+ENTRYPOINT ["/home/node/app/docker/dev/entrypoint.sh"]
