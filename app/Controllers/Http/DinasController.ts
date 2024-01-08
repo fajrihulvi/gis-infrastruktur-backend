@@ -10,7 +10,7 @@ export default class DinasController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 }

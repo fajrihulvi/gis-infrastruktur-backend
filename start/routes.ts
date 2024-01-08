@@ -43,11 +43,19 @@ Route.group(() => {
   Route.get('/list', 'DinasController.getList')
 }).middleware('jwt').prefix('master-data/dinas')
 
-Route.group(() => {
-  Route.get('/list', 'CategoryInfrastucturesController.getAllCategory')
-}).prefix('category')
+Route.get('category/list', 'CategoryInfrastucturesController.getAllCategory')
 
-Route.post('shp/upload', 'UploadsController.uploadShp').middleware('jwt')
+Route.group(() => {
+  Route.get('/detail', 'CategoryInfrastucturesController.getById')
+  Route.post('/create', 'CategoryInfrastucturesController.create')
+  Route.put('/update', 'CategoryInfrastucturesController.update')
+  Route.delete('/delete', 'CategoryInfrastucturesController.delete')
+}).middleware('jwt').prefix('category')
+
+Route.group(() => {
+  Route.post('/', 'UploadsController.uploadShp').middleware('jwt')
+  Route.post('/existing', 'UploadsController.uploadExistingInfrastucture').middleware('jwt')
+}).prefix('shp/upload')
 
 Route.group(() => {
   Route.get('/get-maps', 'MapsController.getMaps')

@@ -2,11 +2,148 @@
   get:
     tags:
       - Master Data - Category Infrastructure
-    description: Get All Category Infrastructure
+    parameters:
+      - in: query
+        name: limit
+        type: integer
+        example: 10
+        minimum: 1
+      - in: query
+        name: page
+        type: integer
+        example: 1
+        minimum: 1
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: type
+        type: integer
+    description: Get All Category Infrastructure (if limit & page empty get all data without pagination)
     responses:
       200:
         description: Success
       401:
         description: unauthorize
+      400:
+        description: bad request
+
+/category/detail:
+  get:
+    tags:
+      - Master Data - Category Infrastructure
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: query
+        name: id
+        required: true
+        type: integer
+        example: 1
+    description: Get Category Infrastructure by id
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/category/create:
+  post:
+    tags:
+      - Master Data - Category Infrastructure
+    description: Create Category Infrastructure
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: jalan
+                required: true
+              type:
+                type: number
+                example: 1
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
+
+/category/update:
+  put:
+    tags:
+      - Master Data - Category Infrastructure
+    description: Update Category Infrastructure
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+                required: true
+              name:
+                type: string
+                example: jalan
+                required: true
+              type:
+                type: number
+                example: 1
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
+      400:
+        description: bad request
+
+/category/delete:
+  delete:
+    tags:
+      - Master Data - Category Infrastructure
+    description: Delete Category Infrastructure
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+                required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: success
+      401:
+        description: invalid credentials
       400:
         description: bad request

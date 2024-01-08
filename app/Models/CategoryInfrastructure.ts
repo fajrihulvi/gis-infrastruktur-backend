@@ -8,6 +8,9 @@ export default class CategoryInfrastructure extends BaseModel {
   @column()
   public name: string
 
+  @column()
+  public category_type: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

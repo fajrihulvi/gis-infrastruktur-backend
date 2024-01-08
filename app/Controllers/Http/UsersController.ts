@@ -8,9 +8,12 @@ export default class UsersController {
   public async login({auth, request, response}: HttpContextContract) {
     const newUserSchema = schema.create({
       email: schema.string([
-        rules.email()
+        rules.email(),
+        rules.required()
       ]),
-      password: schema.string()
+      password: schema.string([
+        rules.required()
+      ])
     })
 
     try {
@@ -44,7 +47,7 @@ export default class UsersController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 
@@ -79,26 +82,38 @@ export default class UsersController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 
   public async storeAdmin({request, response}: HttpContextContract) {
     const newUserSchema = schema.create({
       email: schema.string([
-        rules.email()
+        rules.email(),
+        rules.required()
       ]),
-      password: schema.string(),
-      created_by: schema.number(),
-      updated_by: schema.number(),
-      name: schema.string(),
+      password: schema.string([
+        rules.required()
+      ]),
+      created_by: schema.number([
+        rules.required()
+      ]),
+      updated_by: schema.number([
+        rules.required()
+      ]),
+      name: schema.string([
+        rules.required()
+      ]),
       phone: schema.string([
         rules.minLength(10),
         rules.maxLength(13)
       ]),
-      department_id: schema.number(),
+      dinas_id: schema.number([
+        rules.required()
+      ]),
       nip: schema.string([
-        rules.minLength(10)
+        rules.minLength(10),
+        rules.required()
       ])
     })
 
@@ -151,25 +166,36 @@ export default class UsersController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 
   public async updateUserAdmin({request, response}: HttpContextContract) {
     const newUserSchema = schema.create({
-      id: schema.number(),
-      email: schema.string([
-        rules.email()
+      id: schema.number([
+        rules.required()
       ]),
-      updated_by: schema.number(),
-      name: schema.string(),
+      email: schema.string([
+        rules.email(),
+        rules.required()
+      ]),
+      password: schema.string(),
+      updated_by: schema.number([
+        rules.required()
+      ]),
+      name: schema.string([
+        rules.required()
+      ]),
       phone: schema.string([
         rules.minLength(10),
         rules.maxLength(13)
       ]),
-      department_id: schema.number(),
+      dinas_id: schema.number([
+        rules.required()
+      ]),
       nip: schema.string([
-        rules.minLength(10)
+        rules.minLength(10),
+        rules.required()
       ])
     })
 
@@ -180,6 +206,7 @@ export default class UsersController {
 
       const id = request.input('id')
       const name = request.input('name')
+      const password = request.input('password')
       const email = request.input('email')
       const phone = request.input('phone')
       const dinas_id = request.input('dinas_id')
@@ -200,6 +227,12 @@ export default class UsersController {
 
       const users = await User.findOrFail(id)
 
+      if (password) {
+        // hash password
+        const hashed_password = await Hash.make(password)
+
+        users.password = hashed_password
+      }
       users.name = name
       users.email = email
       users.phone = phone
@@ -213,13 +246,15 @@ export default class UsersController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 
   public async deleteAdmin ({request, response}: HttpContextContract) {
     const newUserSchema = schema.create({
-      id: schema.number(),
+      id: schema.number([
+        rules.required()
+      ]),
       updated_by: schema.number()
     })
 
@@ -247,7 +282,7 @@ export default class UsersController {
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 }

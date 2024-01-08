@@ -67,15 +67,68 @@ export default class UploadsController {
           .catch(function (error) {
             console.log(error);
 
-            return response.badRequest({code: 400, message: error.messages})
+            return response.badRequest({code: 500, message: error.messages})
           })
 
           return response.send({code: 200, message: 'success upload data'})
+      }else {
+        return response.badRequest({code: 400, message: 'no file uploaded'})
       }
     } catch (error) {
       console.log(error);
 
-      return response.badRequest({code: 400, message: error.messages})
+      return response.badRequest({code: 500, message: error.messages})
+    }
+  }
+
+  async uploadExistingInfrastucture({request, response}:HttpContextContract) {
+    try {
+      const file = request.file('file')
+
+      if (file) {
+        await file.move(Application.tmpPath('uploads'))
+
+        const readableStream = await Drive.getStream(file.fileName)
+        let form = new FormData()
+        form.append('upload', readableStream)
+        form.append('rfc7946', 'RFC7946')
+
+        let data = await axios.post('http://ogre.adc4gis.com/convert', form)
+          .then(function (response) {
+            response.data.features.forEach(async (raw) => {
+              let data = raw.properties
+              let kecamatan = data.WADMKC
+              let kelurahan = data.WADMKL
+              let area = data.AREA
+              let perimeter = data.PERIMETER
+              let hectare = data.HECTARES
+              let x_axis = data.X_CENTR
+              let y_axis = data.Y_CENTR
+              // let id = data.ID
+              let code = data.KODE_WIL
+              let population = data.Jlh_Pddk
+              let wide = data.Luas_Wil
+              let feature = JSON.stringify(raw)
+
+              console.log(raw);
+
+              return data
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+
+            return response.badRequest({code: 500, message: error.messages})
+          })
+
+          return response.send({code: 200, data: data})
+      }else {
+        return response.badRequest({code: 400, message: 'no file uploaded'})
+      }
+    } catch (error) {
+      console.log(error);
+
+      return response.badRequest({code: 500, message: error.messages})
     }
   }
 }
