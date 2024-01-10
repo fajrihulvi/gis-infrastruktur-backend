@@ -53,9 +53,15 @@ Route.group(() => {
 }).middleware('jwt').prefix('category')
 
 Route.group(() => {
-  Route.post('/', 'UploadsController.uploadShp').middleware('jwt')
-  Route.post('/existing', 'UploadsController.uploadExistingInfrastucture').middleware('jwt')
-}).prefix('shp/upload')
+  Route.post('/', 'UploadsController.uploadShp')
+}).middleware('jwt').prefix('shp/upload')
+
+Route.group(() => {
+  Route.post('/upload', 'UploadsController.uploadExistingInfrastucture')
+  Route.put('/update', 'MasterShpsController.input')
+  Route.get('/list', 'MasterShpsController.getList')
+  Route.get('/', 'MasterShpsController.getById')
+}).middleware('jwt').prefix('master/shp')
 
 Route.group(() => {
   Route.get('/get-maps', 'MapsController.getMaps')

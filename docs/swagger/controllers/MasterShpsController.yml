@@ -1,0 +1,133 @@
+/master/shp/update:
+  put:
+    tags:
+      - Master Data - shp
+    description: update new shp data
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                required: true
+                example: 1
+              name:
+                type: string
+                required: true
+                example: pemukiman
+              category_infrastructure_id:
+                type: number
+                required: true
+                example: 1
+              used_variable:
+                type: string
+                required: true
+                example: '{"ID","JENIS","COUNT","KECAMATAN","KELURAHAN","AREA","PERIMETER","HECTARES"}'
+              color:
+                type: string
+                required: true
+                example: "#fc4103"
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/master/shp/list:
+  get:
+    tags:
+      - Master Data - shp
+    description: get list shp data
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: query
+        name: limit
+        required: true
+        type: integer
+        example: 10
+        minimum: 1
+      - in: query
+        name: page
+        required: true
+        type: integer
+        example: 1
+        minimum: 1
+      - in: query
+        name: order_by
+        type: integer
+      - in: query
+        name: order_direction
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: created_at
+        type: date
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/master/shp:
+  get:
+    tags:
+      - Master Data - shp
+    description: get shp data by id
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: query
+        name: id
+        required: true
+        type: integer
+        example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/master/shp/upload:
+  post:
+    tags:
+      - Master Data - shp
+    description: upload file and create shp master data
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+                required: true
+              id:
+                type: number
+                example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request

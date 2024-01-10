@@ -6,6 +6,8 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import Kecamatan from 'App/Models/Kecamatan';
 import Kelurahan from 'App/Models/Kelurahan';
 import Database from '@ioc:Adonis/Lucid/Database';
+import MasterShp from 'App/Models/MasterShp';
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class UploadsController {
   async uploadShp({request, response}:HttpContextContract) {
@@ -82,8 +84,21 @@ export default class UploadsController {
   }
 
   async uploadExistingInfrastucture({request, response}:HttpContextContract) {
+    const newDataSchema = schema.create({
+      file: schema.file({
+        extnames: ['zip']
+      },[
+        rules.required()
+      ])
+    })
+
     try {
+      await request.validate({
+        schema: newDataSchema
+      })
+
       const file = request.file('file')
+      let id = request.input('id')
 
       if (file) {
         await file.move(Application.tmpPath('uploads'))
@@ -92,28 +107,15 @@ export default class UploadsController {
         let form = new FormData()
         form.append('upload', readableStream)
         form.append('rfc7946', 'RFC7946')
+        let variable
+        let features
 
-        let data = await axios.post('http://ogre.adc4gis.com/convert', form)
+        await axios.post('http://ogre.adc4gis.com/convert', form)
           .then(function (response) {
-            response.data.features.forEach(async (raw) => {
-              let data = raw.properties
-              let kecamatan = data.WADMKC
-              let kelurahan = data.WADMKL
-              let area = data.AREA
-              let perimeter = data.PERIMETER
-              let hectare = data.HECTARES
-              let x_axis = data.X_CENTR
-              let y_axis = data.Y_CENTR
-              // let id = data.ID
-              let code = data.KODE_WIL
-              let population = data.Jlh_Pddk
-              let wide = data.Luas_Wil
-              let feature = JSON.stringify(raw)
+            //get object keys
+            variable = Object.keys(response.data.features[0].properties)
 
-              console.log(raw);
-
-              return data
-            });
+            features = JSON.stringify(response.data.features)
           })
           .catch(function (error) {
             console.log(error);
@@ -121,7 +123,20 @@ export default class UploadsController {
             return response.badRequest({code: 500, message: error.messages})
           })
 
-          return response.send({code: 200, data: data})
+        if (id) {
+          let data = await MasterShp.findOrFail(id)
+
+          data.variable = variable
+          data.features = features
+
+          await data.save()
+        }else{
+          id = await MasterShp.create({variable: variable, features: features}).then(async data => {
+              return data.id
+            });
+        }
+
+        return response.send({code: 200, data: variable, id: id})
       }else {
         return response.badRequest({code: 400, message: 'no file uploaded'})
       }
