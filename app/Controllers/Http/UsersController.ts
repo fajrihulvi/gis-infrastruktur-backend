@@ -55,7 +55,7 @@ export default class UsersController {
     try {
       const page = request.input('page') != null ? parseInt(request.input('page')):1
       const limit = request.input('limit') != null ? parseInt(request.input('limit')):10
-      const order_by = request.input('order_by') != null ? request.input('order_by'):'id'
+      const order_by = request.input('order_by') != null ? request.input('order_by'):'created_at'
       const order_direction = request.input('order_direction') != null ? request.input('order_direction'):'desc'
       const name = request.input('name')
       const dinas_id = request.input('dinas_id')
@@ -73,9 +73,24 @@ export default class UsersController {
 
       let user
       if (name) {
-        user = await User.query().preload('role').preload('dinas').where('role_id', '!=', 1).where(param).whereILike('name', '%'+name+'%').orderBy(order_by, order_direction).paginate(page, limit)
+        user = await User
+          .query()
+          .preload('role')
+          .preload('dinas')
+          .where('role_id', '!=', 1)
+          .where(param)
+          .whereILike('name', '%'+name+'%')
+          .orderBy(order_by, order_direction)
+          .paginate(page, limit)
       }else{
-        user = await User.query().preload('role').preload('dinas').where('role_id', '!=', 1).where(param).orderBy(order_by, order_direction).paginate(page, limit)
+        user = await User
+          .query()
+          .preload('role')
+          .preload('dinas')
+          .where('role_id', '!=', 1)
+          .where(param)
+          .orderBy(order_by, order_direction)
+          .paginate(page, limit)
       }
 
       return response.send({code: 200, data: user})

@@ -57,6 +57,13 @@ Route.group(() => {
 }).middleware('jwt').prefix('shp/upload')
 
 Route.group(() => {
+  Route.post('create', 'SuggestionsController.input')
+  Route.put('update', 'SuggestionsController.update')
+  Route.get('list', 'SuggestionsController.getList')
+  Route.get('/', 'SuggestionsController.getById')
+}).middleware('jwt').prefix('suggestion')
+
+Route.group(() => {
   Route.post('/upload', 'UploadsController.uploadExistingInfrastucture')
   Route.put('/update', 'MasterShpsController.input')
   Route.get('/list', 'MasterShpsController.getList')

@@ -9,7 +9,7 @@ export default class MasterShpsController {
     try {
       const page = request.input('page') != null ? parseInt(request.input('page')):1
       const limit = request.input('limit') != null ? parseInt(request.input('limit')):10
-      const order_by = request.input('order_by') != null ? request.input('order_by'):'id'
+      const order_by = request.input('order_by') != null ? request.input('order_by'):'created_at'
       const order_direction = request.input('order_direction') != null ? request.input('order_direction'):'desc'
       const name = request.input('name')
       const created_at = request.input('created_at') ? moment(request.input('created_at')):null

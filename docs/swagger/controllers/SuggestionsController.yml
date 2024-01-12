@@ -1,0 +1,126 @@
+/suggestion/create:
+  post:
+    tags:
+      - Suggestion
+    description: Create Suggestion data
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          description: input payload
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+              phone_number:
+                type: string
+                example: 08111111111
+              suggestion:
+                type: string
+                example: testing suggestion
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/suggestion/update:
+  put:
+    tags:
+      - Suggestion
+    description: Update Suggestion data
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          description: input payload (status 1->accepted, 2->rejected)
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              status:
+                type: number
+                example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/suggestion/list:
+  get:
+    tags:
+      - Suggestion
+    security:
+      - bearerAuth: []
+    description: Get All Suggestion
+    parameters:
+      - in: query
+        name: limit
+        required: true
+        type: integer
+        example: 10
+        minimum: 1
+      - in: query
+        name: page
+        required: true
+        type: integer
+        example: 1
+        minimum: 1
+      - in: query
+        name: order_by
+        type: integer
+      - in: query
+        name: order_direction
+        type: integer
+      - in: query
+        name: phone_number
+        type: string
+      - in: query
+        name: status
+        type: number
+      - in: query
+        name: created_at
+        type: string
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request
+
+/suggestion/:
+  get:
+    tags:
+      - Suggestion
+    security:
+      - bearerAuth: []
+    description: Get Suggestion By Id
+    parameters:
+      - in: query
+        name: id
+        required: true
+        type: integer
+        example: 1
+    responses:
+      200:
+        description: Success
+      401:
+        description: unauthorize
+      400:
+        description: bad request

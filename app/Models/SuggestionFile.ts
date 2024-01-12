@@ -3,6 +3,8 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Suggestion from './Suggestion'
 
 export default class SuggestionFile extends BaseModel {
+  public static table = 'suggestion_files'
+
   @column({ isPrimary: true })
   public id: number
 
